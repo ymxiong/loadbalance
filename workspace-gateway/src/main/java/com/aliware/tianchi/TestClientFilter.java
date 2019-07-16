@@ -40,6 +40,7 @@ public class TestClientFilter implements Filter {
                 longAdderLarge.decrement();
 //                LOGGER.info(new Date().getTime() + ":large:" + (com.aliware.tianchi.Constants.activeThreadCount.get("large") + ":" + com.aliware.tianchi.Constants.longAdderLarge.longValue()));
             }
+
             Result result = invoker.invoke(invocation);
             return result;
         } catch (Exception e) {
