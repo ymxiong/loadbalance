@@ -7,10 +7,7 @@ import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.rpc.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.aliware.tianchi.Constants.*;
@@ -44,8 +41,10 @@ public class TestClientFilter implements Filter {
                 longAdderLarge.decrement();
 //                LOGGER.info(new Date().getTime() + ":large:" + (com.aliware.tianchi.Constants.activeThreadCount.get("large") + ":" + com.aliware.tianchi.Constants.longAdderLarge.longValue()));
             }
-            Map argument = (Map<String, Long>) invocation.getArguments()[0];
-//            com.aliware.tianchi.Constants.concurrentHashMap.put(String.valueOf(argument.get("id")), new Date().getTime());
+            Map<String, String> attachments = invocation.getAttachments();
+            String value = UUID.randomUUID().toString();
+            attachments.put("hello", value);
+            com.aliware.tianchi.Constants.concurrentHashMap.put(value, new Date().getTime());
             Result result = invoker.invoke(invocation);
             return result;
         } catch (Exception e) {
@@ -60,19 +59,20 @@ public class TestClientFilter implements Filter {
         //System.out.println( "request time : " +(endTime - startTime));
         URL url = invoker.getUrl();
         int port = url.getPort();
-        Map argument = (Map<String, Long>) invocation.getArguments()[0];
-        Long startTime = concurrentHashMap.get(String.valueOf(argument.get("id")));
+        Map<String, String> attachments = invocation.getAttachments();
+        String value = attachments.get("hello");
+        Long startTime = concurrentHashMap.get(value);
         Long endTime = new Date().getTime();
         if (port == 20880) {
-            linkedHashMapSmall.put(String.valueOf(argument.get("id")), endTime - startTime);
+            linkedHashMapSmall.put(value, endTime - startTime);
             System.out.println("small:" + (endTime - startTime));
             longAdderSmall.increment();
         } else if (port == 20870) {
-            linkedHashMapMedium.put(String.valueOf(argument.get("id")), endTime - startTime);
+            linkedHashMapMedium.put(value, endTime - startTime);
             System.out.println("medium:" + (endTime - startTime));
             longAdderMedium.increment();
         } else {
-            linkedHashMapLarge.put(String.valueOf(argument.get("id")), endTime - startTime);
+            linkedHashMapLarge.put(value, endTime - startTime);
             System.out.println("large:" + (endTime - startTime));
             longAdderLarge.increment();
         }

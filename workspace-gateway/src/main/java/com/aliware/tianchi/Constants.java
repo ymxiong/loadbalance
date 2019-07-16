@@ -22,46 +22,46 @@ public class Constants {
     public static Long lastMedium = 0l;
     public static Long lastSmall = 0l;
 
-    public static AtomicLong smallSum = new AtomicLong();
+    public static LongAdder smallSum = new LongAdder();
     public static final int capacity = 10;
     public static LinkedHashMap<String, Long> linkedHashMapSmall = new LinkedHashMap<String, Long>(10) {
         @Override
         public Long put(String key, Long value) {
-            smallSum.addAndGet(value);
+            smallSum.add(value);
             return super.put(key, value);
         }
 
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, Long> eldest) {
-            smallSum.addAndGet(-eldest.getValue());
+            smallSum.add(-eldest.getValue());
             return size() > capacity;
         }
     };
-    public static AtomicLong mediumSum = new AtomicLong();
+    public static LongAdder mediumSum = new LongAdder();
     public static LinkedHashMap<String, Long> linkedHashMapMedium = new LinkedHashMap<String, Long>(10) {
         @Override
         public Long put(String key, Long value) {
-            mediumSum.addAndGet(value);
+            mediumSum.add(value);
             return super.put(key, value);
         }
 
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, Long> eldest) {
-            mediumSum.addAndGet(-eldest.getValue());
+            mediumSum.add(-eldest.getValue());
             return size() > capacity;
         }
     };
-    public static AtomicLong largeSum = new AtomicLong();
+    public static LongAdder largeSum = new LongAdder();
     public static LinkedHashMap<String, Long> linkedHashMapLarge = new LinkedHashMap<String, Long>(10) {
         @Override
         public Long put(String key, Long value) {
-            largeSum.addAndGet(value);
+            largeSum.add(value);
             return super.put(key, value);
         }
 
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, Long> eldest) {
-            largeSum.addAndGet(-eldest.getValue());
+            largeSum.add(-eldest.getValue());
             return size() > capacity;
         }
     };
