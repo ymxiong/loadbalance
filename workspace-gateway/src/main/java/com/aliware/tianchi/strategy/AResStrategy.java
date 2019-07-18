@@ -31,9 +31,9 @@ public class AResStrategy extends AbstractStrategy {
         mediumActiveCount = mediumActiveCount == 0 ? 1 : mediumActiveCount;
         largeActiveCount = largeActiveCount == 0 ? 1 : largeActiveCount;
 
-        double k1 = Math.log(rand.nextDouble()) / (smallActiveCount * 1);
-        double k2 = Math.log(rand.nextDouble()) / (mediumActiveCount * 2);
-        double k3 = Math.log(rand.nextDouble()) / (largeActiveCount * 2.3);
+        double k1 = Math.log(rand.nextDouble()) / (smallActiveCount * 2);
+        double k2 = Math.log(rand.nextDouble()) / (mediumActiveCount * 3);
+        double k3 = Math.log(rand.nextDouble()) / (largeActiveCount * 5);
 
         double result = Math.max(Math.max(k1, k2), k3);
 
